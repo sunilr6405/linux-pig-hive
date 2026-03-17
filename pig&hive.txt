@@ -1,0 +1,93 @@
+DATASET
+
+1,Sunil,20,50000
+2,Priya,21,60000
+3,Rohit,23,45000
+4,Neha,22,70000
+5,Karan,21,52000
+
+Column Names -> id, name, age, salary
+
+
+
+PIG QUERIES
+
+1. Load Dataset
+employees = LOAD 'employees.csv' USING PigStorage(',')
+AS (id:int, name:chararray, age:int, salary:int);
+
+# Loads the employees.csv file into Pig and defines column names and data types.
+
+
+2. Display Data
+DUMP employees;
+
+# Displays all employee records on the screen.
+
+
+3. Filter Employees with salary > 55000
+high_salary = FILTER employees BY salary > 55000;
+DUMP high_salary;
+
+# This query selects employees whose salary is greater than 55000.
+# The filtered result is stored in high_salary and then displayed.
+
+
+4. Group Employees by Age
+grp = GROUP employees BY age;
+
+# This groups employee records based on their age values.
+# Employees with same age are placed in the same group.
+
+
+5. Count Employees in each Age Group
+result = FOREACH grp GENERATE group AS age, COUNT(employees) AS total_employees;
+DUMP result;
+
+# This calculates number of employees in each age group.
+# COUNT(employees) counts records in each group.
+
+
+
+HIVE QUERIES
+
+1. Create Table
+CREATE TABLE employees(
+id INT,
+name STRING,
+age INT,
+salary INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+# This query creates a Hive table named employees with four columns.
+# It specifies that fields are separated using commas.
+
+
+2. Load Data
+LOAD DATA LOCAL INPATH 'employees.csv'
+INTO TABLE employees;
+
+# This command loads dataset from local system into Hive table.
+
+
+3. Display Table Data
+SELECT * FROM employees;
+
+# This query displays all records from employees table.
+
+
+4. Employees with salary > 55000
+SELECT * FROM employees
+WHERE salary > 55000;
+
+# This query selects employees who earn more than 55000.
+
+
+5. Count Employees in each Age Group
+SELECT age, COUNT(*) AS total_employees
+FROM employees
+GROUP BY age;
+
+# This groups employees by age and counts number of employees in each group.
